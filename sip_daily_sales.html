@@ -466,8 +466,8 @@ async function sendEodNotification(entry) {
             + 'Cash: '+cash+'\n'
             + 'Total USD: '+(total>0?'$'+total.toLocaleString():'-')+'\n'
             + 'Customers: '+(entry.customers||'-');
-  var PUSHOVER_TOKEN = '';
-  var PUSHOVER_USER  = '';
+  var PUSHOVER_TOKEN = 'auiq1n56wakpe3zbjg276bo2x5gouy';
+  var PUSHOVER_USER  = 'u75wnfx6sj5we856q4n848qevbrbso';
   if (!PUSHOVER_TOKEN || !PUSHOVER_USER) return;
   try {
     await fetch('https://api.pushover.net/1/messages.json', {
