@@ -117,6 +117,14 @@ tbody td{padding:.65rem 1rem;color:var(--sip-ink);vertical-align:middle;}
 .loader{text-align:center;padding:3rem;font-size:.82rem;color:var(--sip-muted);letter-spacing:.08em;text-transform:uppercase;}
 
 @media(max-width:700px){.sg{grid-template-columns:1fr 1fr;}.hi{padding:1.5rem 1rem;}main{padding:1rem;}.ni{padding:0 1rem;}}
+
+/* ── Quick date pills ── */
+.dpills{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.2rem;}
+.dpill{padding:.3rem .75rem;border-radius:20px;border:1.5px solid var(--sip-peach-input);background:var(--sip-white);font-family:'Outfit',sans-serif;font-size:.75rem;font-weight:500;color:var(--sip-muted);cursor:pointer;transition:all .15s;}
+.dpill:hover{border-color:var(--sip-peach-deep);color:var(--sip-ink);}
+.dpill.active{background:var(--sip-peach-deep);border-color:var(--sip-peach-deep);color:var(--sip-ink);}
+.dpill.logged{background:var(--sip-tint);border-color:var(--sip-peach-mid);color:var(--sip-ink);}
+.dpill.logged.active{background:var(--sip-peach-deep);border-color:var(--sip-peach-deep);}
 </style>
 </head>
 <body>
@@ -380,8 +388,21 @@ function rEn(overrideDate, msg, msgType) {
   var msgHtml = msg
     ? '<div class="emsg '+(msgType||'info')+'">'+msg+'<\/div>'
     : (ex ? '<div class="emsg info">Existing entry loaded — edit and save to update.<\/div>' : '');
+  // Build quick-date pills from May 1st to today
+  var today = new Date().toISOString().slice(0,10);
+  var start = new Date('2026-05-01T00:00:00');
+  var end   = new Date(today+'T00:00:00');
+  var pills = '';
+  var loggedDates = D.map(function(e){return e.date;});
+  for(var d=new Date(start); d<=end; d.setDate(d.getDate()+1)) {
+    var ds = d.toISOString().slice(0,10);
+    var label = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+    var cls = 'dpill'+(ds===date?' active':'')+(loggedDates.indexOf(ds)>=0?' logged':'');
+    pills += '<button class="'+cls+'" onclick="rEn(\''+ds+'\')">'+label+'<\/button>';
+  }
   document.getElementById('t-entry').innerHTML =
     '<div class="ef"><h3>Log Daily Sales<\/h3>'
+    +'<div class="dpills">'+pills+'<\/div>'
     +msgHtml
     +'<div class="fgrid">'
     +'<div class="fgrow"><label>Date<\/label><input id="ed" type="date" value="'+date+'" onchange="onDateChange()"><\/div>'
