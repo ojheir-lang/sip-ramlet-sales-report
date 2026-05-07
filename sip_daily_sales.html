@@ -395,7 +395,7 @@ function rEn(overrideDate, msg, msgType) {
   var pills = '';
   var loggedDates = D.map(function(e){return e.date;});
   for(var d=new Date(start); d<=end; d.setDate(d.getDate()+1)) {
-    var ds = d.toISOString().slice(0,10);
+    var ds = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
     var label = d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
     var cls = 'dpill'+(ds===date?' active':'')+(loggedDates.indexOf(ds)>=0?' logged':'');
     pills += '<button class="'+cls+'" onclick="rEn(\''+ds+'\')">'+label+'<\/button>';
