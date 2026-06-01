@@ -487,18 +487,19 @@ async function sendEodNotification(entry) {
             + 'Cash: '+cash+'\n'
             + 'Total USD: '+(total>0?'$'+total.toLocaleString():'-')+'\n'
             + 'Customers: '+(entry.customers||'-');
-  var PUSHOVER_TOKEN = 'auiq1n56wakpe3zbjg276bo2x5gouy';
-  var PUSHOVER_USER  = 'u75wnfx6sj5we856q4n848qevbrbso';
-  if (!PUSHOVER_TOKEN || !PUSHOVER_USER) return;
-  try {
-    await fetch('https://api.pushover.net/1/messages.json', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: 'token='+PUSHOVER_TOKEN+'&user='+PUSHOVER_USER
-          + '&title=Sip+%C2%B7+Ramleh+%E2%80%94+End+of+Day'
-          + '&message='+encodeURIComponent(msg)
-    });
-  } catch(e) { console.warn('Pushover failed:', e); }
+  var INSTANCE_ID = '7107637898';
+  var API_TOKEN   = '0d5a866f109941f0bc8fb46cc4d7ae8b684b6b9096d8460d8a';
+  var NUMBERS     = ['9613197166', '9613278914'];
+  var url = 'https://api.greenapi.com/waInstance'+INSTANCE_ID+'/sendMessage/'+API_TOKEN;
+  NUMBERS.forEach(async function(num) {
+    try {
+      await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chatId: num+'@c.us', message: msg })
+      });
+    } catch(e) { console.warn('WhatsApp failed for '+num+':', e); }
+  });
 }
 </script>
 </body>
